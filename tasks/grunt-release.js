@@ -45,6 +45,7 @@ module.exports = function(grunt){
 
     Q()
       .then(ifEnabled('bump', bump))
+      .then(ifEnabled('add', addDist))
       .then(ifEnabled('add', add))
       .then(ifEnabled('commit', commit))
       .then(ifEnabled('tag', tag))
@@ -100,12 +101,16 @@ module.exports = function(grunt){
       return deferred.promise;
     }
 
+    function addDist(){
+      return run('git add -f ' + options.folder, ' staged ' + options.folder);
+    }
+
     function add(){
       return run('git add ' + config.file, ' staged ' + config.file);
     }
 
     function commit(){
-      return run('git commit '+ config.file +' -m "'+ commitMessage +'"', 'committed ' + config.file);
+      return run('git commit -m "'+ commitMessage +'"', 'committed ' + config.file);
     }
 
     function tag(){
